@@ -8,6 +8,11 @@ document.getElementById('save-button').addEventListener('click', handleSaveClick
   
 var headset;
 
+if(navigator.hid === undefined) {
+  document.getElementById('instructions').style.display = 'block';
+  document.getElementById('controls').style.display = 'none';
+}
+
 navigator.hid.addEventListener("disconnect", event => {
   headset.close();
   handleDisconnect();
