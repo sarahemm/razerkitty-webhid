@@ -8,15 +8,15 @@
   <body>
     <h1>Razer Kraken Kitty Edition Controller</h1>
     <p>This tool relies on WebHID, which is in beta and only supported on Chrome. To allow the USB functionality visit chrome://flags/#enable-experimental-web-platform-features and enable "Experimental Web Platform Features", then restart Chrome.</p>
-    <button id="connect-button">Connect</button><br><br>
+    <button id="connect-button">Connect</button> <button id="save-button">Save</button><br><br>
     R: <div class="slidecontainer">
-      <input type="range" min="0" max="255" value="255" class="slider" id="redSlider">
+      <input type="range" min="0" max="255" value="255" class="slider" id="redSlider" disabled=true>
     </div><br>
     G: <div class="slidecontainer">
-      <input type="range" min="0" max="255" value="255" class="slider" id="greenSlider">
+      <input type="range" min="0" max="255" value="255" class="slider" id="greenSlider" disabled=true>
     </div><br>
     B: <div class="slidecontainer">
-      <input type="range" min="0" max="255" value="0" class="slider" id="blueSlider">
-    </div><br>
+      <input type="range" min="0" max="255" value="255" class="slider" id="blueSlider" disabled=true>
+    </div><br><br>
   </body>
 </html>

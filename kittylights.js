@@ -1,9 +1,43 @@
 document.getElementById('connect-button').addEventListener('click', handleConnectClick);
+document.getElementById('save-button').addEventListener('click', handleSaveClick);
 
 var headset;
 
+// from https://www.w3schools.com/js/js_cookies.asp
+// just "temporary" :)
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
 async function handleConnectClick() {
     headset = await openDevice();
+    if(getCookie("red") != "") {
+        redSlider.value = getCookie("red");
+        greenSlider.value = getCookie("green");
+        blueSlider.value = getCookie("blue");
+    }
+    redSlider.disabled = false;
+    greenSlider.disabled = false;
+    blueSlider.disabled = false;
+    updateColor();
+}
+
+function handleSaveClick() {
+    document.cookie = "red=" + redSlider.value;
+    document.cookie = "green=" + greenSlider.value;
+    document.cookie = "blue=" + blueSlider.value;
 }
 
 async function openDevice() {
