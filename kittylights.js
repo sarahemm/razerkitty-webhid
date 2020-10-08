@@ -1,7 +1,17 @@
 document.getElementById('connect-button').addEventListener('click', handleConnectClick);
 document.getElementById('save-button').addEventListener('click', handleSaveClick);
-
+// not yet implemented for devices without serial numbers
+// https://bugs.chromium.org/p/chromium/issues/detail?id=958918
+//navigator.hid.addEventListener("connect", event => {
+//  alert("connected");
+//});
+    
 var headset;
+
+navigator.hid.addEventListener("disconnect", event => {
+    headset.close();
+    handleDisconnect();
+});
 
 // from https://www.w3schools.com/js/js_cookies.asp
 // just "temporary" :)
@@ -31,6 +41,7 @@ async function handleConnectClick() {
     redSlider.disabled = false;
     greenSlider.disabled = false;
     blueSlider.disabled = false;
+    connectButton.disabled = true;
     updateColor();
 }
 
@@ -40,28 +51,32 @@ function handleSaveClick() {
     document.cookie = "blue=" + blueSlider.value;
 }
 
+function handleDisconnect() {
+    redSlider.disabled = true;
+    greenSlider.disabled = true;
+    blueSlider.disabled = true;
+    connectButton.disabled = false;
+}
+
 async function openDevice() {
     const vendorId = 0x1532; // Razer
     const productId = 0x0f19;  // Kraken Kitty Edition
 
     const device_list = await navigator.hid.getDevices();
-
     let device = device_list.find(d => d.vendorId === vendorId && d.productId === productId);
 
     if (!device) {
-        // this returns an array now
         let devices = await navigator.hid.requestDevice({
-            filters: [{ vendorId, productId }],
+            filters: [{vendorId, productId}],
         });
-        console.log("devices:",devices);
         device = devices[0];
-        if( !device ) return null;
+        if(!device) return null;
     }
 
     if (!device.opened) {
         await device.open();
     }
-    console.log("device opened:",device);
+    console.log("Headset device opened:",device);
 
    return device;
 }
@@ -91,7 +106,6 @@ async function changeColor(device, [r, g, b] ) {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1e, 0x00
     ]);
     await device.sendFeatureReport(reportId, data);
-    // console.log("sent feature report")
 }
 
 function updateColor() {
@@ -104,6 +118,7 @@ function updateColor() {
 var redSlider = document.getElementById("redSlider");
 var greenSlider = document.getElementById("greenSlider");
 var blueSlider = document.getElementById("blueSlider");
+var connectButton = document.getElementById('connect-button');
 
 redSlider.oninput = function() { updateColor(); }
 greenSlider.oninput = function() { updateColor(); }
