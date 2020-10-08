@@ -9,14 +9,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 
-    <script type="module" src="kittylights.js"></script>
+    <script type="module" src="kitty-util.mjs"></script>
+    <script type="module" src="kitty-hardware.mjs"></script>
+    <script type="module" src="kitty-ui.mjs"></script>
+
   </head>
   <body style='background-color: #cdeeff'>
     <h1>Razer Kraken Kitty Edition Controller</h1>
     <div style='display: none' id='instructions'><p>This tool relies on WebHID, which is in beta and only supported on Chrome.</p><p>To allow the USB functionality visit chrome://flags/#enable-experimental-web-platform-features and enable "Experimental Web Platform Features", then restart Chrome.</p></div>
     <div id='controls'>
       <button id="connect-button">Connect</button> <button id="save-button">Save</button><br><br>
-      <div class="colorPalette" style="border: 1px solid blue;"></div>
+      Colour: <div class="colorPalette" style="border: 1px solid blue;"></div>
     </div>
   </body>
 </html>
