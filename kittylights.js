@@ -33,28 +33,20 @@ function getCookie(cname) {
 
 async function handleConnectClick() {
   headset = await openDevice();
-  if(getCookie("red") != "") {
-    redSlider.value = getCookie("red");
-    greenSlider.value = getCookie("green");
-    blueSlider.value = getCookie("blue");
+  if(getCookie("color") != "") {
+    pickr.setColor(getCookie("color"));
   }
-  redSlider.disabled = false;
-  greenSlider.disabled = false;
-  blueSlider.disabled = false;
+  pickr.enable();
   connectButton.disabled = true;
   updateColor();
 }
 
 function handleSaveClick() {
-  document.cookie = "red=" + redSlider.value;
-  document.cookie = "green=" + greenSlider.value;
-  document.cookie = "blue=" + blueSlider.value;
+  document.cookie = "color=" + pickr.getColor().toHEXA();
 }
 
 function handleDisconnect() {
-  redSlider.disabled = true;
-  greenSlider.disabled = true;
-  blueSlider.disabled = true;
+  pickr.disable();
   connectButton.disabled = false;
 }
 
@@ -109,17 +101,57 @@ async function changeColor(device, [r, g, b] ) {
 }
 
 function updateColor() {
-  var red = redSlider.value;
-  var green = greenSlider.value;
-  var blue = blueSlider.value;
-  changeColor(headset, [red, green, blue]);
+  var rgba = pickr.getColor().toRGBA();
+  changeColor(headset, [rgba[0], rgba[1], rgba[2]]);
 }
 
-var redSlider = document.getElementById("redSlider");
-var greenSlider = document.getElementById("greenSlider");
-var blueSlider = document.getElementById("blueSlider");
 var connectButton = document.getElementById('connect-button');
 
-redSlider.oninput = function() { updateColor(); }
-greenSlider.oninput = function() { updateColor(); }
-blueSlider.oninput = function() { updateColor(); }
+const kitty_swatches = [
+  'rgb(0,   0,   0  )',
+  'rgb(255, 0,   0  )',
+  'rgb(0,   255, 0  )',
+  'rgb(0,   0,   255)',
+  'rgb(52,  0,   255)',
+  'rgb(255, 0,   255)',
+  'rgb(0,   255, 255)',
+  'rgb(255, 255, 0  )',
+  'rgb(255, 56,  0  )',
+  'rgb(255, 255, 255)'
+];
+
+const pickr = Pickr.create({
+  el: '.colorPalette',
+  theme: 'classic',
+  lockOpacity: true,
+  comparison: false,
+  disabled: true,
+  default: '#ffffff',
+
+  swatches: kitty_swatches,
+
+  components: {
+
+      // Main components
+      preview: false,
+      opacity: false,
+      hue: true,
+
+      // Input / output Options
+      interaction: {
+          hex: true,
+          rgba: true,
+          hsla: false,
+          hsva: false,
+          cmyk: false,
+          input: true,
+          clear: false,
+          cancel: false,
+          save: false
+      }
+  }
+});
+
+pickr.on('change', (color, instance) => {
+  updateColor();
+});

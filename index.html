@@ -3,20 +3,19 @@
   <head>
     <title>Kitty Lighting Controller</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+
     <script type="module" src="kittylights.js"></script>
   </head>
-  <body>
+  <body style='background-color: #cdeeff'>
     <h1>Razer Kraken Kitty Edition Controller</h1>
     <p>This tool relies on WebHID, which is in beta and only supported on Chrome. To allow the USB functionality visit chrome://flags/#enable-experimental-web-platform-features and enable "Experimental Web Platform Features", then restart Chrome.</p>
     <button id="connect-button">Connect</button> <button id="save-button">Save</button><br><br>
-    R: <div class="slidecontainer">
-      <input type="range" min="0" max="255" value="255" class="slider" id="redSlider" disabled=true>
-    </div><br>
-    G: <div class="slidecontainer">
-      <input type="range" min="0" max="255" value="255" class="slider" id="greenSlider" disabled=true>
-    </div><br>
-    B: <div class="slidecontainer">
-      <input type="range" min="0" max="255" value="255" class="slider" id="blueSlider" disabled=true>
-    </div><br><br>
+
+    <div class="colorPalette" style="border: 1px solid blue;"></div>
   </body>
 </html>
