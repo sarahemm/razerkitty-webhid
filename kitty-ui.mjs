@@ -6,9 +6,10 @@ var headset;
 async function handleConnectClick() {
   headset = await Hardware.openDevice();
   if(Util.getCookie("color") != "") {
-    pickr.setColor(Util.getCookie("color"));
+    pickrAll.setColor(Util.getCookie("color"));
   }
-  pickr.enable();
+  pickrAll.enable();
+  pickrSingle.forEach(function(item) { item.enable(); });
   connectButton.disabled = true;
   updateColor();
 }
@@ -30,8 +31,7 @@ const kitty_swatches = [
   'rgb(255, 255, 255)'
 ];
 
-const pickr_config = {
-  el: '.colorPalette',
+const pickr_config_template = {
   theme: 'classic',
   lockOpacity: true,
   comparison: false,
@@ -62,23 +62,63 @@ const pickr_config = {
   }
 }
 
-const pickr = Pickr.create(pickr_config);
+const pickrAll = createPickr('.colorPaletteAll');
+const pickrSingle = [
+  createPickr('.colorPaletteEarLeft'),
+  createPickr('.colorPaletteEarRight'),
+  createPickr('.colorPaletteCupLeft'),
+  createPickr('.colorPaletteCupRight')
+]
 
-pickr.on('change', (color, instance) => {
+pickrSingle.forEach(function(item) {
+  item.on('change', (color, instance) => {
+    // only take action if the change that caused this
+    // event to fire was a user action, not programmatic
+    if(item.isOpen()) {
+      updateColor();
+      clearAllColour();
+    }
+  });
+});
+
+pickrAll.on('change', (color, instance) => {
+  updateSingleColours(color);
   updateColor();
 });
 
+function createPickr(element) {
+  var pickr_config = pickr_config_template;
+  pickr_config['el'] = element;
+
+  return Pickr.create(pickr_config);
+}
+
 function handleSaveClick() {
-  document.cookie = "color=" + pickr.getColor().toHEXA();
+  document.cookie = "color=" + pickrAll.getColor().toHEXA();
 }
 
 function updateColor() {
-  var rgba = pickr.getColor().toRGBA();
-  Hardware.changeColor(headset, [rgba[0], rgba[1], rgba[2]]);
+  var rgba = [];
+  pickrSingle.forEach(function(item, index) {
+    rgba[index] = item.getColor().toRGBA();
+  });
+  Hardware.changeColor(headset, rgba);
+}
+
+function updateSingleColours(color) {
+  var newcolor = color.toHEXA().toString();
+  pickrSingle.forEach(function(item) {
+    item.setColor(newcolor);
+  });
+}
+
+function clearAllColour() {
+  pickrAll.setColor(null);
 }
 
 function handleDisconnect() {
-  pickr.disable();
+  pickrAll.disable();
+  pickrSingle.forEach(function(item) { item.disable(); });
   connectButton.disabled = false;
 }
 

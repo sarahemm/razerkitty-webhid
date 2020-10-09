@@ -33,12 +33,12 @@ async function openDevice() {
    return device;
 }
 
-async function changeColor(device, [r, g, b] ) {
+async function changeColor(device, rgba_array ) {
   // these are separate for future use
-  var left_ear = [r, g, b];
-  var right_ear = [r, g, b];
-  var left_cup = [r, g, b];
-  var right_cup = [r, g, b];
+  var left_ear = rgba_array[0];
+  var right_ear = rgba_array[1];
+  var left_cup = rgba_array[2];
+  var right_cup = rgba_array[3];
 
   const reportId = 0;
   const data = Uint8Array.from([
@@ -55,8 +55,16 @@ async function changeColor(device, [r, g, b] ) {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1e, 0x00
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
   ]);
+  
+  // calculate and fill in the checksum
+  var checksum = 0;
+  for(var i = 2; i < 88; i++) {
+    checksum ^= data[i];
+  }
+  data[88] = checksum
+
   await device.sendFeatureReport(reportId, data);
 }
 
