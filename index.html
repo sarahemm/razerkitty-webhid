@@ -15,17 +15,22 @@
     <script type="module" src="kitty-hardware.mjs"></script>
     <script type="module" src="kitty-ui.mjs"></script>
 
+    <link rel="stylesheet" href="kittycontrol.css"/>
   </head>
   <body style='background-color: #cdeeff'>
     <h1>Razer Kraken Kitty Edition Controller</h1>
     <div style='display: none' id='instructions'><p>This tool relies on WebHID, which requires Chrome 86 or higher or another Chromium-based browser supporting the WebHID origin trial.<p>If you are using a Chromium-based browser and you see this message, try visiting chrome://flags/#enable-experimental-web-platform-features and enabling "Experimental Web Platform Features", then restart your browser to enable this functionality. Please file a GitHub issue if this occurs so it can be looked into.</p></div>
     <div id='controls'>
       <button id="connect-button">Connect</button> <button id="save-button">Save</button><br><br>
-      All Colour: <div class="colorPaletteAll"></div>
-      Left Ear Colour: <div class="colorPaletteEarLeft"></div>
-      Right Ear Colour: <div class="colorPaletteEarRight"></div>
-      Left Cup Colour: <div class="colorPaletteCupLeft"></div>
-      Right Cup Colour: <div class="colorPaletteCupRight"></div>
+      <div class='controlContainer'>
+        <div class='controlGrid'>
+          <div class="controlBox leftEarControl">Left Ear Colour: <div class="colorPaletteEarLeft"></div></div>
+          <div class="controlBox rightEarControl">Right Ear Colour: <div class="colorPaletteEarRight"></div></div>
+          <div class="controlBox allControl">All Colours <div class="colorPaletteAll"></div></div>
+          <div class="controlBox leftCupControl">Left Cup Colour: <div class="colorPaletteCupLeft"></div></div>
+          <div class="controlBox rightCupControl">Right Cup Colour: <div class="colorPaletteCupRight"></div></div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

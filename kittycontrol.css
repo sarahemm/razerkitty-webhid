@@ -1,0 +1,37 @@
+.controlContainer {
+  max-width: 10cm;
+}
+
+.controlBox {
+  text-align: center;
+}
+
+.allControl {
+  grid-area: allControl;
+}
+
+.leftEarControl {
+  grid-area: leftEarControl;
+}
+
+.rightEarControl {
+  grid-area: rightEarControl;
+}
+
+.leftCupControl {
+  grid-area: leftCupControl;
+}
+
+.rightCupControl {
+  grid-area: rightCupControl;
+}
+
+.controlGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas:
+    "leftEarControl . rightEarControl"
+    ". allControl . "
+    "leftCupControl . rightCupControl";
+}
