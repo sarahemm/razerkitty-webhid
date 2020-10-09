@@ -1,13 +1,11 @@
 import * as Hardware from './kitty-hardware.mjs';
-import * as Util from './kitty-util.mjs';
+import * as Storage from './kitty-storage.mjs';
 
 var headset;
 
 async function handleConnectClick() {
   headset = await Hardware.openDevice();
-  if(Util.getCookie("color") != "") {
-    pickrAll.setColor(Util.getCookie("color"));
-  }
+  Storage.loadColours(pickrAll, pickrSingle);
   pickrAll.enable();
   pickrSingle.forEach(function(item) { item.enable(); });
   connectButton.disabled = true;
@@ -94,7 +92,7 @@ function createPickr(element) {
 }
 
 function handleSaveClick() {
-  document.cookie = "color=" + pickrAll.getColor().toHEXA();
+  Storage.saveColours(pickrAll, pickrSingle);
 }
 
 function updateColor() {
