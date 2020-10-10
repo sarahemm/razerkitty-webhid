@@ -49,13 +49,19 @@ async function handleConnectClick() {
     return;
   }
   Static.enableControls();
+
+  Static.loadSettings();
+  Spectrum.loadSettings();
+
   connectButton.disabled = true;
   connected = true;
+
   startEffect(currentTab);
 }
 
 function handleSaveClick() {
   Static.saveSettings();
+  Spectrum.saveSettings();
 }
 
 function handleDisconnect() {

@@ -99,7 +99,6 @@ function clearAllColour() {
 function enableControls() {
   pickrAll.enable();
   pickrSingle.forEach(function(item) { item.enable(); });
-  loadSettings();
 }
 
 function disableControls() {
@@ -140,4 +139,4 @@ function loadSettings() {
   }
 }
 
-export { enableControls, disableControls, updateColor, saveSettings };
+export { enableControls, disableControls, updateColor, saveSettings, loadSettings };

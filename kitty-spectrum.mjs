@@ -1,4 +1,5 @@
 import * as Hardware from './kitty-hardware.mjs';
+import * as Util from './kitty-util.mjs';
 
 // https://stackoverflow.com/questions/17242144/javascript-convert-hsb-hsv-color-to-rgb-accurately/54024653#54024653
 function hsv2rgb(h,s,v) {
@@ -40,35 +41,66 @@ function stopSpectrum() {
   clearInterval(spectrumInterval);
 }
 
+function saveSettings() {
+  document.cookie = "spectrumSpeed=" + $('#spectrumSpeed').slider("option", "value");
+  document.cookie = "spectrumSat=" + $('#spectrumSat').slider("option", "value");
+  document.cookie = "spectrumBright=" + $('#spectrumBright').slider("option", "value");
+}
+
+function loadSettings() {
+  if(!Util.getCookie("spectrumSpeed")) {
+    return;
+  }
+  $('#spectrumSpeed').slider("value", Util.getCookie("spectrumSpeed"));
+  $('#spectrumSat').slider("value", Util.getCookie("spectrumSat"));
+  $('#spectrumBright').slider("value", Util.getCookie("spectrumBright"));
+
+  recalculateSliders();
+}
+
+function recalculateSliders() {
+  var speedSlider = $('#spectrumSpeed').slider("option", "value");
+  var satSlider = $('#spectrumSat').slider("option", "value");
+  var brightSlider = $('#spectrumBright').slider("option", "value");
+  
+  stepTime = 500 - speedSlider * 5 + 50;
+  stepHue = speedSlider / 20 + 1;
+  
+  saturation = satSlider / 100;
+
+  value = brightSlider / 100;
+
+  if(spectrumInterval) {
+    stopSpectrum();
+    startSpectrum(myHeadset);
+  }
+}
+
 $( function() {
   $( "#spectrumSpeed" ).slider({
+    value: 50,
     slide: function(event, ui) {
-      stepTime = 500 - ui.value * 5 + 50;
-      stepHue = ui.value / 20 + 1;
-      stopSpectrum();
-      startSpectrum(myHeadset);
+      recalculateSliders();
     }
   });
 } );
 
 $( function() {
   $( "#spectrumSat" ).slider({
+    value: 100,
     slide: function(event, ui) {
-      saturation = ui.value / 100;
-      stopSpectrum();
-      startSpectrum(myHeadset);
+      recalculateSliders();
     }
   });
 } );
 
 $( function() {
   $( "#spectrumBright" ).slider({
+    value: 100,
     slide: function(event, ui) {
-      value = ui.value / 100;
-      stopSpectrum();
-      startSpectrum(myHeadset);
+      recalculateSliders();
     }
   });
 } );
 
-export { startSpectrum, stopSpectrum };
+export { startSpectrum, stopSpectrum, saveSettings, loadSettings };
