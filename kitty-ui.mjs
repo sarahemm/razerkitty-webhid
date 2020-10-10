@@ -1,6 +1,7 @@
 import * as Hardware from './kitty-hardware.mjs';
 import * as Static from './kitty-static.mjs';
 import * as Spectrum from './kitty-spectrum.mjs';
+import * as Util from './kitty-util.mjs';
 
 const TAB_STATIC = 0;
 const TAB_SPECTRUM = 1;
@@ -52,8 +53,10 @@ async function handleConnectClick() {
 
   Static.loadSettings();
   Spectrum.loadSettings();
+  loadCurrentTab();
 
   connectButton.disabled = true;
+  saveButton.disabled = false;
   connected = true;
 
   startEffect(currentTab);
@@ -62,13 +65,25 @@ async function handleConnectClick() {
 function handleSaveClick() {
   Static.saveSettings();
   Spectrum.saveSettings();
+  saveCurrentTab();
 }
 
 function handleDisconnect() {
   stopEffect(currentTab);
   Static.disableControls();
   connectButton.disabled = false;
+  saveButton.disabled = true;
   connected = false;
+}
+
+function saveCurrentTab() {
+  document.cookie = "currentEffect=" + $("#controlTabs").tabs('option', 'active');
+}
+
+function loadCurrentTab() {
+  if(Util.getCookie('currentEffect')) {
+    $("#controlTabs").tabs({active: Util.getCookie('currentEffect')});
+  }
 }
 
 if(navigator.hid === undefined) {
@@ -79,5 +94,6 @@ if(navigator.hid === undefined) {
 document.getElementById('connect-button').addEventListener('click', handleConnectClick);
 document.getElementById('save-button').addEventListener('click', handleSaveClick);
 var connectButton = document.getElementById('connect-button');
+var saveButton = document.getElementById('save-button');
 
 export { handleDisconnect, headset };
