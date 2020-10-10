@@ -33,8 +33,7 @@ async function openDevice() {
    return device;
 }
 
-async function changeColor(device, rgba_array ) {
-  // these are separate for future use
+async function changeColor(device, rgba_array) {
   var left_ear = rgba_array[0];
   var right_ear = rgba_array[1];
   var left_cup = rgba_array[2];
