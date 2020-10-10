@@ -1,5 +1,5 @@
 import * as Hardware from './kitty-hardware.mjs';
-import * as Storage from './kitty-storage.mjs';
+import * as Util from './kitty-util.mjs';
 import * as UI from './kitty-ui.mjs';
 
 const kitty_swatches = [
@@ -99,7 +99,7 @@ function clearAllColour() {
 function enableControls() {
   pickrAll.enable();
   pickrSingle.forEach(function(item) { item.enable(); });
-  Storage.loadColours(pickrAll, pickrSingle);
+  loadSettings();
 }
 
 function disableControls() {
@@ -108,7 +108,36 @@ function disableControls() {
 }
 
 function saveSettings() {
-  Storage.saveColours(pickrAll, pickrSingle);
+  document.cookie = "leftEar="  + pickrSingle[0].getColor().toHEXA().toString();
+  document.cookie = "rightEar=" + pickrSingle[1].getColor().toHEXA().toString();
+  document.cookie = "leftCup="  + pickrSingle[2].getColor().toHEXA().toString();
+  document.cookie = "rightCup=" + pickrSingle[3].getColor().toHEXA().toString();
+}
+
+function loadSettings() {
+  if(!Util.getCookie('leftEar')) {
+    return;
+  }
+
+  pickrSingle[0].setColor(Util.getCookie('leftEar'));
+  pickrSingle[1].setColor(Util.getCookie('rightEar'));
+  pickrSingle[2].setColor(Util.getCookie('leftCup'));
+  pickrSingle[3].setColor(Util.getCookie('rightCup'));
+  
+  const color = pickrSingle[0].getColor();
+  var colorsMatch = true;
+  pickrSingle.forEach(function(item, index) {
+    if(item.getColor() != color) {
+      colorsMatch = false;
+    }
+  });
+  // if all the colours match, set the 'all' colour to the same
+  // if they don't, null/X out the 'all' colour in the UI
+  if(colorsMatch) {
+    pickrAll.setColor(pickrSingle[0].getColor().toHEXA().toString());
+  } else {
+    pickrAll.setColor(null);
+  }
 }
 
 export { enableControls, disableControls, updateColor, saveSettings };
