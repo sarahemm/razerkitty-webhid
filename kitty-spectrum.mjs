@@ -1,18 +1,21 @@
 import * as Hardware from './kitty-hardware.mjs';
 
+// https://stackoverflow.com/questions/17242144/javascript-convert-hsb-hsv-color-to-rgb-accurately/54024653#54024653
 function hsv2rgb(h,s,v) {
   let f= (n,k=(n+h/60)%6) => v - v*s*Math.max( Math.min(k,4-k,1), 0);     
   return [f(5),f(3),f(1)];       
 }
 
-var hue;
+var hue = 0;
 var myHeadset;
 var spectrumInterval;
 
+var stepHue = 1;
+var stepTime = 50;
+
 function startSpectrum(headset) {
-  hue = 0;
   myHeadset = headset
-  spectrumInterval = setInterval(function() { stepSpectrum();}, 25);
+  spectrumInterval = setInterval(function() { stepSpectrum();}, stepTime);
 }
 
 function stepSpectrum() {
@@ -24,7 +27,7 @@ function stepSpectrum() {
     [color[0]*255, color[1]*255, color[2]*255]]
   );
 
-  hue++;
+  hue += stepHue;
   if(hue > 360) {
     hue = 0;
   }
@@ -33,5 +36,16 @@ function stepSpectrum() {
 function stopSpectrum() {
   clearInterval(spectrumInterval);
 }
+
+$( function() {
+  $( "#spectrumSpeed" ).slider({
+    slide: function(event, ui) {
+      stepTime = 500 - ui.value * 5 + 50;
+      stepHue = ui.value / 20 + 1;
+      stopSpectrum();
+      startSpectrum(myHeadset);
+    }
+  });
+} );
 
 export { startSpectrum, stopSpectrum };
