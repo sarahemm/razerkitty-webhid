@@ -22,13 +22,22 @@
     <div style='display: none' id='instructions'><p>This tool relies on WebHID, which requires Chrome 86 or higher or another Chromium-based browser supporting the WebHID origin trial.<p>If you are using a Chromium-based browser and you see this message, try visiting chrome://flags/#enable-experimental-web-platform-features and enabling "Experimental Web Platform Features", then restart your browser to enable this functionality. Please file a GitHub issue if this occurs so it can be looked into.</p></div>
     <div id='controls'>
       <button id="connect-button">Connect</button> <button id="save-button">Save</button><br><br>
-      <div class='controlContainer'>
-        <div class='controlGrid'>
-          <div class="controlBox leftEarControl">Left Ear Colour: <div class="colorPaletteEarLeft"></div></div>
-          <div class="controlBox rightEarControl">Right Ear Colour: <div class="colorPaletteEarRight"></div></div>
-          <div class="controlBox allControl">All Colours <div class="colorPaletteAll"></div></div>
-          <div class="controlBox leftCupControl">Left Cup Colour: <div class="colorPaletteCupLeft"></div></div>
-          <div class="controlBox rightCupControl">Right Cup Colour: <div class="colorPaletteCupRight"></div></div>
+      <div id='controlTabs'>
+        <ul>
+          <li><a href="#controlTabs-1">Static Colours</a></li>
+          <li><a href="#controlTabs-2">Spectrum Cycling</a></li>
+        </ul>
+        <div id="controlTabs-1">
+          <div class='controlGrid'>
+            <div class="controlBox leftEarControl">Left Ear Colour: <div class="colorPaletteEarLeft"></div></div>
+            <div class="controlBox rightEarControl">Right Ear Colour: <div class="colorPaletteEarRight"></div></div>
+            <div class="controlBox allControl">All Colours <div class="colorPaletteAll"></div></div>
+            <div class="controlBox leftCupControl">Left Cup Colour: <div class="colorPaletteCupLeft"></div></div>
+            <div class="controlBox rightCupControl">Right Cup Colour: <div class="colorPaletteCupRight"></div></div>
+          </div>
+        </div>
+        <div id="controlTabs-2">
+          No options available for this effect.
         </div>
       </div>
     </div>

@@ -1,5 +1,9 @@
-.controlContainer {
+.controlTabs {
   max-width: 10cm;
+}
+
+.ui-tabs-panel {
+  background: #dde5ee !important;
 }
 
 .controlBox {
