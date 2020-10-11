@@ -23,6 +23,9 @@ var stepTime = 50;
 var recalcSlidersSoon = false;
 
 function startSpectrum(headset) {
+  // don't start if we're already running
+  if(spectrumInterval) { return; }
+  
   myHeadset = headset
   spectrumInterval = setInterval(function() { stepSpectrum();}, stepTime);
   lastTime = Date.now();
@@ -53,6 +56,7 @@ function stepSpectrum() {
 
 function stopSpectrum() {
   clearInterval(spectrumInterval);
+  spectrumInterval = null;
 }
 
 function saveSettings() {

@@ -57,6 +57,7 @@ async function handleConnectClick() {
 
   connectButton.disabled = true;
   saveButton.disabled = false;
+  loadButton.disabled = false;
   connected = true;
 
   startEffect(currentTab);
@@ -68,11 +69,18 @@ function handleSaveClick() {
   saveCurrentTab();
 }
 
+function handleLoadClick() {
+  Static.loadSettings();
+  Spectrum.loadSettings();
+  loadCurrentTab();
+}
+
 function handleDisconnect() {
   stopEffect(currentTab);
   Static.disableControls();
   connectButton.disabled = false;
   saveButton.disabled = true;
+  loadButton.disabled = true;
   connected = false;
 }
 
@@ -82,7 +90,8 @@ function saveCurrentTab() {
 
 function loadCurrentTab() {
   if(Util.getCookie('currentEffect')) {
-    $("#controlTabs").tabs({active: Util.getCookie('currentEffect')});
+    currentTab = Util.getCookie('currentEffect')
+    $("#controlTabs").tabs({active: currentTab});
   }
 }
 
@@ -93,7 +102,9 @@ if(navigator.hid === undefined) {
 
 document.getElementById('connect-button').addEventListener('click', handleConnectClick);
 document.getElementById('save-button').addEventListener('click', handleSaveClick);
+document.getElementById('load-button').addEventListener('click', handleLoadClick);
 var connectButton = document.getElementById('connect-button');
 var saveButton = document.getElementById('save-button');
+var loadButton = document.getElementById('load-button');
 
 export { handleDisconnect, headset };
