@@ -80,8 +80,8 @@ function recalculateSliders() {
   var satSlider = $('#spectrumSat').slider("option", "value");
   var brightSlider = $('#spectrumBright').slider("option", "value");
 
-  stepTime = 300 - speedSlider * 2.75 + 50;
-  huePerMillisecond = 1/(500-$('#spectrumSpeed').slider("option", "value")*5+20);
+  huePerMillisecond = Util.scale(speedSlider, 0, 100, 0.005, 0.05); 
+  stepTime = 1 / huePerMillisecond
 
   hueOffset = hueOffsetSlider;
   saturation = satSlider / 100;
