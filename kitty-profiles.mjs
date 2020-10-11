@@ -22,6 +22,7 @@ function profileSave() {
 
 function profileLoad() {
   var profileList = Util.getCookie('profileList');
+  $('#profileSelect').empty();
   if(!profileList) {
     // no saved profiles at all, initialize the first one
     currentProfile = 'Default';
