@@ -21,7 +21,11 @@
     <h1>Razer Kraken Kitty Edition Controller</h1>
     <div style='display: none' id='instructions'><p>This tool relies on WebHID, which requires Chrome 86 or higher or another Chromium-based browser supporting the WebHID origin trial.<p>If you are using a Chromium-based browser and you see this message, try visiting chrome://flags/#enable-experimental-web-platform-features and enabling "Experimental Web Platform Features", then restart your browser to enable this functionality. Please file a GitHub issue if this occurs so it can be looked into.</p></div>
     <div id='controls'>
-      <button id="connect-button">Connect</button> <button id="save-button" disabled=true>Save</button> <button id="load-button" disabled=true>Load</button><br><br>
+      <button id="connect-button">Connect</button> <button id="save-button" disabled=true>Save</button> <button id="saveas-button" disabled=true>Save As</button> <button id="load-button" disabled=true>Load</button><br><br>
+      Profiles: <select>
+        <option>Profile A</option>
+        <option>Profile B</option>
+      </select><br><br>
       <div id='controlTabs'>
         <ul>
           <li><a href="#controlTabs-1">Static Colours</a></li>
