@@ -55,11 +55,13 @@ async function handleConnectClick() {
   }
   Static.enableControls();
   
+  Profiles.profileInit();
   Profiles.profileLoad();
 
   connectButton.disabled = true;
   saveButton.disabled = false;
-  loadButton.disabled = false;
+  saveAsButton.disabled = false;
+  revertButton.disabled = false;
   connected = true;
 
   startEffect(currentTab);
@@ -69,8 +71,27 @@ function handleSaveClick() {
   Profiles.profileSave();
 }
 
-function handleLoadClick() {
+function handleSaveAsClick() {
+  const newProfileName = prompt("Name of new profile (only letters, numbers, and underscore allowed):");
+  if(newProfileName == "" || /[^A-Za-z0-9_]/.exec(newProfileName)) {
+    alert("Profile name has bad characters or zero length, aborting save.");
+    return;
+  }
+  Profiles.profileSaveAs(newProfileName);
+  Profiles.profileInit();
+  $('#profileSelect').val(newProfileName).change();
+  handleProfileChange();
+}
+
+function handleRevertClick() {
+  handleProfileChange();
+}
+
+function handleProfileChange() {
+  stopEffect(currentTab);
+  Profiles.changeCurrentProfile($('#profileSelect').val());
   Profiles.profileLoad();
+  startEffect(currentTab);
 }
 
 function handleDisconnect() {
@@ -78,7 +99,8 @@ function handleDisconnect() {
   Static.disableControls();
   connectButton.disabled = false;
   saveButton.disabled = true;
-  loadButton.disabled = true;
+  saveAsButton.disabled = true;
+  revertButton.disabled = true;
   connected = false;
 }
 
@@ -104,9 +126,12 @@ if(navigator.hid === undefined) {
 
 document.getElementById('connect-button').addEventListener('click', handleConnectClick);
 document.getElementById('save-button').addEventListener('click', handleSaveClick);
-document.getElementById('load-button').addEventListener('click', handleLoadClick);
+document.getElementById('saveas-button').addEventListener('click', handleSaveAsClick);
+document.getElementById('revert-button').addEventListener('click', handleRevertClick);
+document.getElementById('profileSelect').addEventListener('change', handleProfileChange);
 var connectButton = document.getElementById('connect-button');
 var saveButton = document.getElementById('save-button');
-var loadButton = document.getElementById('load-button');
+var saveAsButton = document.getElementById('saveas-button');
+var revertButton = document.getElementById('revert-button');
 
 export { handleDisconnect, saveCurrentTab, loadCurrentTab, headset };

@@ -14,23 +14,52 @@ function profilePrefix() {
     return currentProfile + "-";
   }
 }
+
 function profileSave() {
   Static.saveSettings();
   Spectrum.saveSettings();
   UI.saveCurrentTab();
 }
 
-function profileLoad() {
-  var profileList = Util.getCookie('profileList');
+function profileSaveAs(profileName) {
+  currentProfile = profileName;
+  profileSave();
+}
+
+function changeCurrentProfile(profileName) {
+  currentProfile = profileName;
+}
+
+function profileInit() {
   $('#profileSelect').empty();
-  if(!profileList) {
-    // no saved profiles at all, initialize the first one
-    currentProfile = 'Default';
-    $('#profileSelect').append(new Option("Default", "Default"));
-  }
+  currentProfile = 'Default';
+
+  var profileList = getProfileList();
+  profileList.forEach(function(item, index) {
+    $('#profileSelect').append(new Option(item, item));
+  });
+}
+
+function profileLoad() {
   Static.loadSettings();
   Spectrum.loadSettings();
   UI.loadCurrentTab();
+}
+
+function getProfileList() {
+  var profileList = ['Default'];
+
+  const decodedCookies = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookies.split(';');
+  cookieArray.forEach(function(item, index) {
+    const thisCookie = item.trim().split("=");
+    const profileSplit = thisCookie[0].split("-");
+    if(profileSplit.length == 2 && profileSplit[1] == "currentEffect") {
+      profileList.push(profileSplit[0]);
+    }
+  });
+
+  return profileList;
 }
 
 function setValue(key, value) {
@@ -43,4 +72,4 @@ function getValue(key) {
   return Util.getCookie(fullKey);
 }
 
-export { profileSave, profileLoad, setValue, getValue };
+export { profileSave, profileSaveAs, profileLoad, profileInit, setValue, getValue, changeCurrentProfile };
