@@ -13,16 +13,24 @@ var value = 1;
 
 var myHeadset;
 var spectrumInterval;
+var lastTime;
 
-var stepHue = 1;
+var huePerMillisecond;
 var stepTime = 50;
 
 function startSpectrum(headset) {
   myHeadset = headset
   spectrumInterval = setInterval(function() { stepSpectrum();}, stepTime);
+  lastTime = Date.now();
 }
 
 function stepSpectrum() {
+  hue += huePerMillisecond * (Date.now() - lastTime)
+  if(hue > 360) {
+    hue = 0;
+  }
+  lastTime = Date.now();
+
   var color = hsv2rgb(hue, saturation, value);
   Hardware.changeColor(myHeadset, [
     [color[0]*255, color[1]*255, color[2]*255],
@@ -30,11 +38,6 @@ function stepSpectrum() {
     [color[0]*255, color[1]*255, color[2]*255],
     [color[0]*255, color[1]*255, color[2]*255]]
   );
-
-  hue += stepHue;
-  if(hue > 360) {
-    hue = 0;
-  }
 }
 
 function stopSpectrum() {
@@ -63,9 +66,9 @@ function recalculateSliders() {
   var satSlider = $('#spectrumSat').slider("option", "value");
   var brightSlider = $('#spectrumBright').slider("option", "value");
   
-  stepTime = 500 - speedSlider * 5 + 50;
-  stepHue = speedSlider / 20 + 1;
-  
+  stepTime = 300 - speedSlider * 2.75 + 50;
+  huePerMillisecond = 1/(500-$('#spectrumSpeed').slider("option", "value")*5+20);
+
   saturation = satSlider / 100;
 
   value = brightSlider / 100;
