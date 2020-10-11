@@ -96,9 +96,7 @@ function recalculateSliders() {
 $( function() {
   $( "#spectrumSpeed" ).slider({
     value: 50,
-    slide: function(event, ui) {
-      recalcSlidersSoon = true;
-    }
+    slide: function(event, ui) { recalcSlidersSoon = true; }
   });
 } );
 
@@ -107,27 +105,21 @@ $( function() {
     value: 0,
     step: 45,
     max: 180,
-    slide: function(event, ui) {
-      recalcSlidersSoon = true
-    }
+    slide: function(event, ui) { recalcSlidersSoon = true; }
   });
 } );
 
 $( function() {
   $( "#spectrumSat" ).slider({
     value: 100,
-    slide: function(event, ui) {
-      recalculateSliders();
-    }
+    slide: function(event, ui) { recalcSlidersSoon = true; }
   });
 } );
 
 $( function() {
   $( "#spectrumBright" ).slider({
     value: 100,
-    slide: function(event, ui) {
-      recalculateSliders();
-    }
+    slide: function(event, ui) { recalcSlidersSoon = true; }
   });
 } );
 
