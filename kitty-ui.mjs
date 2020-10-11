@@ -62,6 +62,7 @@ async function handleConnectClick() {
   saveButton.disabled = false;
   saveAsButton.disabled = false;
   revertButton.disabled = false;
+  deleteButton.disabled = Profiles.currentProfile == "Default";
   connected = true;
 
   startEffect(currentTab);
@@ -87,9 +88,17 @@ function handleRevertClick() {
   handleProfileChange();
 }
 
+function handleDeleteClick() {
+  Profiles.profileDelete(Profiles.currentProfile);
+  Profiles.profileInit();
+  $('#profileSelect').val("Default").change();
+  handleProfileChange();
+}
+
 function handleProfileChange() {
   stopEffect(currentTab);
   Profiles.changeCurrentProfile($('#profileSelect').val());
+  deleteButton.disabled = Profiles.currentProfile == "Default";
   Profiles.profileLoad();
   startEffect(currentTab);
 }
@@ -100,6 +109,7 @@ function handleDisconnect() {
   connectButton.disabled = false;
   saveButton.disabled = true;
   saveAsButton.disabled = true;
+  deleteButton.disabled = true;
   revertButton.disabled = true;
   connected = false;
 }
@@ -128,10 +138,12 @@ document.getElementById('connect-button').addEventListener('click', handleConnec
 document.getElementById('save-button').addEventListener('click', handleSaveClick);
 document.getElementById('saveas-button').addEventListener('click', handleSaveAsClick);
 document.getElementById('revert-button').addEventListener('click', handleRevertClick);
+document.getElementById('delete-button').addEventListener('click', handleDeleteClick);
 document.getElementById('profileSelect').addEventListener('change', handleProfileChange);
 var connectButton = document.getElementById('connect-button');
 var saveButton = document.getElementById('save-button');
 var saveAsButton = document.getElementById('saveas-button');
 var revertButton = document.getElementById('revert-button');
+var deleteButton = document.getElementById('delete-button');
 
 export { handleDisconnect, saveCurrentTab, loadCurrentTab, headset };

@@ -46,6 +46,18 @@ function profileLoad() {
   UI.loadCurrentTab();
 }
 
+function profileDelete(profileName) {
+  const decodedCookies = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookies.split(';');
+  cookieArray.forEach(function(item, index) {
+    const thisCookie = item.trim().split("=");
+    const profileSplit = thisCookie[0].split("-");
+    if(profileSplit[0] == profileName) {
+      Util.deleteCookie(item);
+    }
+  });
+}
+
 function getProfileList() {
   var profileList = ['Default'];
 
@@ -72,4 +84,4 @@ function getValue(key) {
   return Util.getCookie(fullKey);
 }
 
-export { profileSave, profileSaveAs, profileLoad, profileInit, setValue, getValue, changeCurrentProfile };
+export { profileSave, profileSaveAs, profileLoad, profileInit, profileDelete, setValue, getValue, changeCurrentProfile, currentProfile };

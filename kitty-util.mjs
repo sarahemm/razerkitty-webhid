@@ -16,8 +16,12 @@ function getCookie(cname) {
   return "";
 }
 
+function deleteCookie(cookieName) {
+  document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+}
+
 const scale = (num, in_min, in_max, out_min, out_max) => {
   return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-export { getCookie, scale };
+export { getCookie, deleteCookie, scale };
