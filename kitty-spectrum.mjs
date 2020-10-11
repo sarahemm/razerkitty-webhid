@@ -8,6 +8,8 @@ function hsv2rgb(h,s,v) {
 }
 
 var hue = 0;
+
+var hueOffset = 0;
 var saturation = 1;
 var value = 1;
 
@@ -18,6 +20,8 @@ var lastTime;
 var huePerMillisecond;
 var stepTime = 50;
 
+var recalcSlidersSoon = false;
+
 function startSpectrum(headset) {
   myHeadset = headset
   spectrumInterval = setInterval(function() { stepSpectrum();}, stepTime);
@@ -25,18 +29,25 @@ function startSpectrum(headset) {
 }
 
 function stepSpectrum() {
-  hue += huePerMillisecond * (Date.now() - lastTime)
-  if(hue > 360) {
-    hue = 0;
+  if(recalcSlidersSoon) {
+    recalculateSliders();
+    recalcSlidersSoon = false;
   }
+
+  hue += huePerMillisecond * (Date.now() - lastTime)
+  hue = hue % 360
   lastTime = Date.now();
 
-  var color = hsv2rgb(hue, saturation, value);
+  var color_rc = hsv2rgb(hue, saturation, value);
+  var color_re = hsv2rgb((hue+hueOffset*1) % 360, saturation, value);
+  var color_le = hsv2rgb((hue+hueOffset*2) % 360, saturation, value);
+  var color_lc = hsv2rgb((hue+hueOffset*3) % 360, saturation, value);
+  
   Hardware.changeColor(myHeadset, [
-    [color[0]*255, color[1]*255, color[2]*255],
-    [color[0]*255, color[1]*255, color[2]*255],
-    [color[0]*255, color[1]*255, color[2]*255],
-    [color[0]*255, color[1]*255, color[2]*255]]
+    [color_le[0]*255, color_le[1]*255, color_le[2]*255],
+    [color_re[0]*255, color_re[1]*255, color_re[2]*255],
+    [color_lc[0]*255, color_lc[1]*255, color_lc[2]*255],
+    [color_rc[0]*255, color_rc[1]*255, color_rc[2]*255]]
   );
 }
 
@@ -46,6 +57,7 @@ function stopSpectrum() {
 
 function saveSettings() {
   document.cookie = "spectrumSpeed=" + $('#spectrumSpeed').slider("option", "value");
+  document.cookie = "spectrumHueOffset=" + $('#spectrumHueOffset').slider("option", "value");
   document.cookie = "spectrumSat=" + $('#spectrumSat').slider("option", "value");
   document.cookie = "spectrumBright=" + $('#spectrumBright').slider("option", "value");
 }
@@ -55,6 +67,7 @@ function loadSettings() {
     return;
   }
   $('#spectrumSpeed').slider("value", Util.getCookie("spectrumSpeed"));
+  $('#spectrumHueOffset').slider("value", Util.getCookie("spectrumHueOffset"));
   $('#spectrumSat').slider("value", Util.getCookie("spectrumSat"));
   $('#spectrumBright').slider("value", Util.getCookie("spectrumBright"));
 
@@ -63,14 +76,15 @@ function loadSettings() {
 
 function recalculateSliders() {
   var speedSlider = $('#spectrumSpeed').slider("option", "value");
+  var hueOffsetSlider = $('#spectrumHueOffset').slider("option", "value");
   var satSlider = $('#spectrumSat').slider("option", "value");
   var brightSlider = $('#spectrumBright').slider("option", "value");
-  
+
   stepTime = 300 - speedSlider * 2.75 + 50;
   huePerMillisecond = 1/(500-$('#spectrumSpeed').slider("option", "value")*5+20);
 
+  hueOffset = hueOffsetSlider;
   saturation = satSlider / 100;
-
   value = brightSlider / 100;
 
   if(spectrumInterval) {
@@ -83,7 +97,18 @@ $( function() {
   $( "#spectrumSpeed" ).slider({
     value: 50,
     slide: function(event, ui) {
-      recalculateSliders();
+      recalcSlidersSoon = true;
+    }
+  });
+} );
+
+$( function() {
+  $( "#spectrumHueOffset" ).slider({
+    value: 0,
+    step: 45,
+    max: 180,
+    slide: function(event, ui) {
+      recalcSlidersSoon = true
     }
   });
 } );
