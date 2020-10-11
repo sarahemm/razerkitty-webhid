@@ -63,6 +63,7 @@ async function handleConnectClick() {
   saveAsButton.disabled = false;
   revertButton.disabled = false;
   deleteButton.disabled = Profiles.currentProfile == "Default";
+  profileSelect.disabled = false;
   connected = true;
 
   startEffect(currentTab);
@@ -111,6 +112,7 @@ function handleDisconnect() {
   saveAsButton.disabled = true;
   deleteButton.disabled = true;
   revertButton.disabled = true;
+  profileSelect.disabled = true;
   connected = false;
 }
 
@@ -145,5 +147,6 @@ var saveButton = document.getElementById('save-button');
 var saveAsButton = document.getElementById('saveas-button');
 var revertButton = document.getElementById('revert-button');
 var deleteButton = document.getElementById('delete-button');
+var profileSelect = document.getElementById('profileSelect');
 
 export { handleDisconnect, saveCurrentTab, loadCurrentTab, headset };
