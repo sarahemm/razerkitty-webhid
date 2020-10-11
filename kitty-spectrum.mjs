@@ -68,6 +68,7 @@ function saveSettings() {
 
 function loadSettings() {
   if(!Util.getCookie("spectrumSpeed")) {
+    recalculateSliders();
     return;
   }
   $('#spectrumSpeed').slider("value", Util.getCookie("spectrumSpeed"));
