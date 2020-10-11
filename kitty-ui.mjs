@@ -1,7 +1,6 @@
 import * as Hardware from './kitty-hardware.mjs';
 import * as Static from './kitty-static.mjs';
 import * as Spectrum from './kitty-spectrum.mjs';
-import * as Util from './kitty-util.mjs';
 import * as Profiles from './kitty-profiles.mjs';
 
 const TAB_STATIC = 0;
@@ -55,10 +54,8 @@ async function handleConnectClick() {
     return;
   }
   Static.enableControls();
-
-  Static.loadSettings();
-  Spectrum.loadSettings();
-  loadCurrentTab();
+  
+  Profiles.profileLoad();
 
   connectButton.disabled = true;
   saveButton.disabled = false;
@@ -86,15 +83,15 @@ function handleDisconnect() {
 }
 
 function saveCurrentTab() {
-  document.cookie = "currentEffect=" + $("#controlTabs").tabs('option', 'active');
+  Profiles.setValue('currentEffect', $("#controlTabs").tabs('option', 'active'));
 }
 
 function loadCurrentTab() {
-  if(!Util.getCookie('currentEffect')) { return; }
+  if(!Profiles.getValue('currentEffect')) { return; }
   
   stopEffect(currentTab);
 
-  currentTab = Util.getCookie('currentEffect')
+  currentTab = Profiles.getValue('currentEffect')
   $("#controlTabs").tabs({active: currentTab});
 
   startEffect(currentTab);

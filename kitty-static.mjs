@@ -1,5 +1,5 @@
 import * as Hardware from './kitty-hardware.mjs';
-import * as Util from './kitty-util.mjs';
+import * as Profiles from './kitty-profiles.mjs';
 import * as UI from './kitty-ui.mjs';
 
 const kitty_swatches = [
@@ -107,21 +107,21 @@ function disableControls() {
 }
 
 function saveSettings() {
-  document.cookie = "leftEar="  + pickrSingle[0].getColor().toHEXA().toString();
-  document.cookie = "rightEar=" + pickrSingle[1].getColor().toHEXA().toString();
-  document.cookie = "leftCup="  + pickrSingle[2].getColor().toHEXA().toString();
-  document.cookie = "rightCup=" + pickrSingle[3].getColor().toHEXA().toString();
+  Profiles.setValue('leftEar',  pickrSingle[0].getColor().toHEXA().toString());
+  Profiles.setValue('rightEar', pickrSingle[1].getColor().toHEXA().toString());
+  Profiles.setValue('leftCup',  pickrSingle[2].getColor().toHEXA().toString());
+  Profiles.setValue('rightCup', pickrSingle[3].getColor().toHEXA().toString());
 }
 
 function loadSettings() {
-  if(!Util.getCookie('leftEar')) {
+  if(!Profiles.getValue('leftEar')) {
     return;
   }
 
-  pickrSingle[0].setColor(Util.getCookie('leftEar'));
-  pickrSingle[1].setColor(Util.getCookie('rightEar'));
-  pickrSingle[2].setColor(Util.getCookie('leftCup'));
-  pickrSingle[3].setColor(Util.getCookie('rightCup'));
+  pickrSingle[0].setColor(Profiles.getValue('leftEar'));
+  pickrSingle[1].setColor(Profiles.getValue('rightEar'));
+  pickrSingle[2].setColor(Profiles.getValue('leftCup'));
+  pickrSingle[3].setColor(Profiles.getValue('rightCup'));
   
   const color = pickrSingle[0].getColor();
   var colorsMatch = true;

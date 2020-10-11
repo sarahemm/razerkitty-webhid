@@ -1,4 +1,5 @@
 import * as Hardware from './kitty-hardware.mjs';
+import * as Profiles from './kitty-profiles.mjs';
 import * as Util from './kitty-util.mjs';
 
 // https://stackoverflow.com/questions/17242144/javascript-convert-hsb-hsv-color-to-rgb-accurately/54024653#54024653
@@ -60,21 +61,21 @@ function stopSpectrum() {
 }
 
 function saveSettings() {
-  document.cookie = "spectrumSpeed=" + $('#spectrumSpeed').slider("option", "value");
-  document.cookie = "spectrumHueOffset=" + $('#spectrumHueOffset').slider("option", "value");
-  document.cookie = "spectrumSat=" + $('#spectrumSat').slider("option", "value");
-  document.cookie = "spectrumBright=" + $('#spectrumBright').slider("option", "value");
+  Profiles.setValue('spectrumSpeed', $('#spectrumSpeed').slider("option", "value"));
+  Profiles.setValue('spectrumHueOffset', $('#spectrumHueOffset').slider("option", "value"));
+  Profiles.setValue('spectrumSat', $('#spectrumSat').slider("option", "value"));
+  Profiles.setValue('spectrumBright', $('#spectrumBright').slider("option", "value"));
 }
 
 function loadSettings() {
-  if(!Util.getCookie("spectrumSpeed")) {
+  if(!Profiles.getValue("spectrumSpeed")) {
     recalculateSliders();
     return;
   }
-  $('#spectrumSpeed').slider("value", Util.getCookie("spectrumSpeed"));
-  $('#spectrumHueOffset').slider("value", Util.getCookie("spectrumHueOffset"));
-  $('#spectrumSat').slider("value", Util.getCookie("spectrumSat"));
-  $('#spectrumBright').slider("value", Util.getCookie("spectrumBright"));
+  $('#spectrumSpeed').slider("value", Profiles.getValue("spectrumSpeed"));
+  $('#spectrumHueOffset').slider("value", Profiles.getValue("spectrumHueOffset"));
+  $('#spectrumSat').slider("value", Profiles.getValue("spectrumSat"));
+  $('#spectrumBright').slider("value", Profiles.getValue("spectrumBright"));
 
   recalculateSliders();
 }
