@@ -123,10 +123,10 @@ function loadSettings() {
   pickrSingle[2].setColor(Profiles.getValue('leftCup'));
   pickrSingle[3].setColor(Profiles.getValue('rightCup'));
   
-  const color = pickrSingle[0].getColor();
+  const color = pickrSingle[0].getColor().toHEXA().toString();
   var colorsMatch = true;
   pickrSingle.forEach(function(item, index) {
-    if(item.getColor() != color) {
+    if(item.getColor().toHEXA().toString() != color) {
       colorsMatch = false;
     }
   });
