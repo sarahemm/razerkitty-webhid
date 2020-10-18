@@ -53,6 +53,11 @@ async function handleConnectClick() {
   if(headset === null) {
     return;
   }
+  if(headset.collections.length > 1) {
+    displayWarning("More than one HID Usage Page found");
+  } else if(headset.collections[0].featureReports.length == 0) {
+    displayWarning("No supported HID feature reports available");
+  }
   Static.enableControls();
   
   Profiles.profileInit();
@@ -70,6 +75,7 @@ async function handleConnectClick() {
 }
 
 function handleSaveClick() {
+  headset = undefined;
   Profiles.profileSave();
 }
 
@@ -129,6 +135,11 @@ function loadCurrentTab() {
   $("#controlTabs").tabs({active: currentTab});
 
   startEffect(currentTab);
+}
+
+function displayWarning(warning) {
+  document.getElementById('warnings').innerHTML = warning + ", you may experience problems with this tool. Please report your OS and browser versions in a GitHub issue to assist with troubleshooting this issue.";
+  document.getElementById('warnings').style = 'display: block; background-color: yellow;';
 }
 
 if(navigator.hid === undefined) {
